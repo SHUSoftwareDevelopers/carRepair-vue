@@ -8,7 +8,7 @@ import UserResetPasswordVue from '@/views/user/UserResetPassword.vue'
 //定义路由关系
 const routes = [
     {path:'/login', component:LoginVue},
-    {path:'/', component:LayoutVue,redirect:'/user/info', children:[
+    {path:'/', component:LayoutVue,redirect:'/user/resetPassword', children:[
         {path:'/user/info',component:UserInfoVue},
         {path:'/user/resetPassword',component:UserResetPasswordVue}
     ]}

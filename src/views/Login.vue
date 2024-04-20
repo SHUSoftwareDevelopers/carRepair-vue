@@ -53,6 +53,7 @@ const rules = {
 import {userRegisterService,userLoginService} from '@/api/common.js'
 const register = async()=>{
     //调用访问后台接口，并接收响应数据Result
+    console.log(registerData.value.userType)
     let result = await userRegisterService(registerData.value);
     ElMessage.success(result.msg ? result.msg : "注册成功");
 }
@@ -161,11 +162,11 @@ const clearRegisterData = ()=>{
 /* 样式 */
 .login-page {
     height: 100vh;
-    background-color: #fff;
+    background-color: #ffffff;
 
     .bg {
-        background: url('@/assets/logo2.png') no-repeat 60% center / 240px auto,
-            url('@/assets/login_bg.jpg') no-repeat center / cover;
+        background: 
+            url('@/assets/fengmian.jpg') no-repeat center / cover;
         border-radius: 0 20px 20px 0;
     }
 

@@ -1,11 +1,17 @@
 <script setup>
 import { ref } from 'vue'
 import useUserInfoStore from '@/stores/userInfo.js'
+import useEmpInfoStore from '@/stores/empInfo.js'
+import useClientInfoStore from '@/stores/clientInfo.js'
 import router from '../../router';
 import avatar from '@/assets/default.png'
 
 const userInfoStore = useUserInfoStore();
 const userInfo = ref({...userInfoStore.info})
+const empInfoStore = useEmpInfoStore();
+const clientInfoStore = useClientInfoStore();
+const clientInfo = ref({...clientInfoStore.clientInfo})
+
 const roleUser = ref('')
 console.log(roleUser.value)
 switch(userInfo.value.userType){
@@ -52,12 +58,20 @@ const rules = {
     ]
 }
 
+
 //修改个人信息
 import {userInfoUpdateService} from '@/api/common.js'
+import {clientInfoUpdateService} from '@/api/client.js'
 import {ElMessage} from 'element-plus'
 const updateUserInfo = async()=>{
     //调用接口
     let result = await userInfoUpdateService(userInfo.value);
+
+    if(userInfo.value.userType===6){
+        console.log("okokok")
+        await clientInfoUpdateService(clientInfo.value);
+        clientInfoStore.setInfo(clientInfo.value)
+    }
     ElMessage.success(result.msg?result.msg:"修改成功");
 
     //修改pinia中的个人信息
@@ -97,19 +111,110 @@ const updateAvatar = async()=>{
                 <span>基本资料</span>
             </div>
         </template>
-        <el-row class="demo-radius">
-            <el-col :span="12">
+        <el-row>
+            <el-col :span="8">
                 <el-form :model="userInfo" :rules="rules" label-width="100px" size="large">
                     <el-form-item label="登录账号">
                         <el-input v-model="userInfo.account" disabled :style="{ maxWidth: '280px'}"></el-input>
                     </el-form-item>
+                </el-form>
+            </el-col>
+            <el-col :span="8">
+                <el-form :model="userInfo" :rules="rules" label-width="100px" size="large">
                     <el-form-item label="角色">
                         <el-input v-model="roleUser" disabled :style="{ maxWidth: '280px'}"></el-input>
                     </el-form-item>
+                </el-form>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="8">
+                <el-form :model="userInfo" :rules="rules" label-width="100px" size="large">
                     <el-form-item label="用户昵称" prop="username">
                         <el-input v-model="userInfo.username" :style="{ maxWidth: '280px'}"></el-input>
                     </el-form-item>
-                    <el-upload 
+                </el-form>
+            </el-col>
+            <el-col :span="8">
+                <el-form :model="userInfo" :rules="rules" label-width="100px" size="large">
+                    <el-form-item label="用户邮箱" prop="email">
+                            <el-input v-model="userInfo.email" :style="{ maxWidth: '280px'}"></el-input>
+                    </el-form-item>
+                </el-form>
+            </el-col>
+            <el-col :span="8">
+                <el-form :model="userInfo" :rules="rules" label-width="100px" size="large">
+                    <el-form-item label="用户电话" prop="phone">
+                        <el-input v-model="userInfo.phone" :style="{ maxWidth: '280px'}"></el-input>
+                    </el-form-item>
+                </el-form>
+            </el-col>
+        </el-row>
+        <el-row v-if="userInfo.userType!==6">
+            <el-col :span="8">
+                <el-form :model="empInfoStore.empInfo" label-width="100px" size="large">
+                    <el-form-item label="员工ID" prop="empId">
+                        <el-input v-model="empInfoStore.empInfo.empId" disabled :style="{ maxWidth: '280px'}"></el-input>
+                    </el-form-item>
+                </el-form>
+            </el-col>
+            <el-col :span="8">
+                <el-form :model="empInfoStore.empInfo" label-width="100px" size="large">
+                    <el-form-item label="真实姓名" prop="empName">
+                            <el-input v-model="empInfoStore.empInfo.empName" disabled :style="{ maxWidth: '280px'}"></el-input>
+                    </el-form-item>
+                </el-form>
+            </el-col>
+        </el-row>
+        <el-row v-if="userInfo.userType===6">
+            <el-col :span="8">
+                <el-form :model="clientInfo" label-width="100px" size="large">
+                    <el-form-item label="客户ID" prop="clientId">
+                        <el-input v-model="clientInfo.clientId" disabled :style="{ maxWidth: '280px'}"></el-input>
+                    </el-form-item>
+                </el-form>
+            </el-col>
+            <el-col :span="8">
+                <el-form :model="clientInfo" label-width="100px" size="large">
+                    <el-form-item label="真实姓名" prop="clientName">
+                            <el-input v-model="clientInfo.clientName" disabled :style="{ maxWidth: '280px'}"></el-input>
+                    </el-form-item>
+                </el-form>
+            </el-col>
+            <el-col :span="8">
+                <el-form :model="clientInfo" label-width="100px" size="large">
+                    <el-form-item label="客户类型" prop="clientType">
+                            <el-input v-model="clientInfo.clientType" disabled :style="{ maxWidth: '280px'}"></el-input>
+                    </el-form-item>
+                </el-form>
+            </el-col>
+        </el-row>
+        <el-row v-if="userInfo.userType===6">
+            <el-col :span="8">
+                <el-form :model="clientInfo" label-width="100px" size="large">
+                    <el-form-item label="折扣率" prop="discountRate">
+                        <el-input v-model="clientInfo.discountRate" disabled :style="{ maxWidth: '280px'}"></el-input>
+                    </el-form-item>
+                </el-form>
+            </el-col>
+            <el-col :span="8">
+                <el-form :model="clientInfo" label-width="100px" size="large">
+                    <el-form-item label="业务联系人" prop="businessContact">
+                            <el-input v-model="clientInfo.businessContact" :style="{ maxWidth: '280px'}"></el-input>
+                    </el-form-item>
+                </el-form>
+            </el-col>
+            <el-col :span="8">
+                <el-form :model="clientInfoo" label-width="100px" size="large">
+                    <el-form-item label="业务联系电话" prop="businessTele">
+                            <el-input v-model="clientInfo.businessTele" :style="{ maxWidth: '280px'}"></el-input>
+                    </el-form-item>
+                </el-form>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col span="24">
+                <el-upload 
                         ref="uploadRef"
                         class="avatar-uploader"
                         :show-file-list="false"
@@ -123,21 +228,13 @@ const updateAvatar = async()=>{
                         <img v-else :src="avatar" width="278" />
                     </el-upload>
                     <br><br>
-                    <el-form-item label="用户邮箱" prop="email">
-                        <el-input v-model="userInfo.email" :style="{ maxWidth: '280px'}"></el-input>
-                    </el-form-item>
-                    <el-form-item label="用户电话" prop="phone">
-                        <el-input v-model="userInfo.phone" :style="{ maxWidth: '280px'}"></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <el-button type="primary" @click="updateUserInfo">提交修改</el-button>
-                </el-form-item>
-                </el-form>
             </el-col>
         </el-row>
-        
+        <el-row>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <el-button type="primary" @click="updateUserInfo">提交修改</el-button>     
+        </el-row>  
     </el-card>
 </template>
 

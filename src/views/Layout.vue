@@ -2,10 +2,16 @@
 import avatar from '@/assets/default.png'
 
 import { userInfoService } from '@/api/common.js';
+import { empInfoService } from '@/api/emp.js'
+import { clientInfoService } from '@/api/client.js'
 import useUserInfoStore from '@/stores/userInfo.js'
 import { useTokenStore } from '@/stores/token.js'
+import useEmpInfoStore from '@/stores/empInfo.js'
+import useClientInfoStore from '@/stores/clientInfo.js'
 const tokenStore = useTokenStore();
 const userInfoStore = useUserInfoStore();
+const empInfoStore = useEmpInfoStore();
+const clientInfoStore = useClientInfoStore();
 //调用函数，获取用户详细信息
 const getUserInfo = async () => {
     //调用接口
@@ -13,14 +19,29 @@ const getUserInfo = async () => {
     //数据存储到pinia
     userInfoStore.setInfo(result.data)
 }
-
 getUserInfo();
+
+const getUniqueInfo = async () => {
+    getUserInfo();
+    if(userInfoStore.info.userType!==6){
+        const result = await empInfoService();
+        console.log(result.data)
+        empInfoStore.setInfo(result.data)
+    }
+    else{
+        const result = await clientInfoService();
+        console.log(result.data)
+        clientInfoStore.setInfo(result.data)
+    }
+}
+
+getUniqueInfo();
 
 //条目被点击后，调用的函数
 // import { userLogoutService } from '@/api/common.js';
 import { useRouter } from 'vue-router';
 const router = useRouter();
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessage, ElMessageBox, ElStep } from 'element-plus';
 const handleCommand = (command) => {
     //判断指令
     if (command === 'logout') {
@@ -144,7 +165,7 @@ const handleCommand = (command) => {
 
         &__logo {
             height: 120px;
-            background: url('@/assets/logo.png') no-repeat center / 120px auto;
+            background: url('@/assets/R-C.jpg') no-repeat center / 160px auto;
         }
 
         .el-menu {
