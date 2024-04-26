@@ -110,7 +110,7 @@ const clearRegisterData = ()=>{
                 <el-form-item prop="trueName">
                     <el-input :prefix-icon="Stamp" placeholder="请输入真实姓名" v-model="registerData.trueName"></el-input>
                 </el-form-item>
-                <el-form-item label="userType">
+                <el-form-item label="用户类型">
                         <el-select size="large" v-model="registerData.userType">
                             <el-option label="管理员" value=0 />
                             <el-option label="前台" value=1 />

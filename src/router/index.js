@@ -5,12 +5,18 @@ import LayoutVue from "@/views/Layout.vue"
 import UserInfoVue from "@/views/user/UserInfo.vue"
 import UserResetPasswordVue from '@/views/user/UserResetPassword.vue'
 
+import ClientInfoManageVue from '@/views/client/ClientInfoManage.vue'
+import ClientCarManageVue from '@/views/client/ClientCarManage.vue'
+import component from 'element-plus/es/components/tree-select/src/tree-select-option.mjs'
+
 //定义路由关系
 const routes = [
     {path:'/login', component:LoginVue},
     {path:'/', component:LayoutVue,redirect:'/user/resetPassword', children:[
         {path:'/user/info',component:UserInfoVue},
-        {path:'/user/resetPassword',component:UserResetPasswordVue}
+        {path:'/user/resetPassword',component:UserResetPasswordVue},
+        {path:'/client/infoManage',component:ClientInfoManageVue},
+        {path:'client/carManage',component:ClientCarManageVue}
     ]}
 ]
 

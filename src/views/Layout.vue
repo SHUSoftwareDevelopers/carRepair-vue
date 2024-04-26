@@ -25,11 +25,13 @@ const getUniqueInfo = async () => {
     getUserInfo();
     if(userInfoStore.info.userType!==6){
         const result = await empInfoService();
+        console.log("请求了员工数据")
         console.log(result.data)
         empInfoStore.setInfo(result.data)
     }
     else{
         const result = await clientInfoService();
+        console.log("请求了客户数据")
         console.log(result.data)
         clientInfoStore.setInfo(result.data)
     }
@@ -85,6 +87,26 @@ const handleCommand = (command) => {
         <el-aside width="200px">
             <div class="el-aside__logo"></div>
             <el-menu active-text-color="#ffd04b" background-color="#232323" text-color="#fff" router>
+                <el-sub-menu index="2" v-show="userInfoStore.info.userType==0||userInfoStore.info.userType==1">
+                    <template #title>
+                        <el-icon>
+                            <UserFilled />
+                        </el-icon>
+                        <span>客户管理</span>
+                    </template>
+                    <el-menu-item index="/client/infoManage">
+                        <el-icon>
+                            <Crop />
+                        </el-icon>
+                        <span>信息管理</span>
+                    </el-menu-item>
+                    <el-menu-item index="/client/carManage">
+                        <el-icon>
+                            <Crop />
+                        </el-icon>
+                        <span>车辆管理</span>
+                    </el-menu-item>
+                </el-sub-menu>
                 <el-sub-menu index="1">
                     <template #title>
                         <el-icon>
@@ -104,12 +126,6 @@ const handleCommand = (command) => {
                         </el-icon>
                         <span>修改密码</span>
                     </el-menu-item>
-                    <!-- <el-menu-item index="/manage/userManage" v-show="userInfoStore.info.role==0">
-                        <el-icon>
-                            <Crop />
-                        </el-icon>
-                        <span>用户管理</span>
-                    </el-menu-item> -->
                 </el-sub-menu>
             </el-menu>
         </el-aside>

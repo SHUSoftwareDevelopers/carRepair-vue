@@ -103,6 +103,7 @@ const updateAvatar = async()=>{
     //修改pinia中的数据
     userInfoStore.info.avatar=imgUrl.value;
 }
+
 </script>
 <template>
     <el-card class="page-container" shadow="hover">
@@ -184,7 +185,7 @@ const updateAvatar = async()=>{
             <el-col :span="8">
                 <el-form :model="clientInfo" label-width="100px" size="large">
                     <el-form-item label="客户类型" prop="clientType">
-                            <el-input v-model="clientInfo.clientType" disabled :style="{ maxWidth: '280px'}"></el-input>
+                            <el-input v-model="clientInfo.clientType" disabled :style="{ maxWidth: '280px'}">个人</el-input>
                     </el-form-item>
                 </el-form>
             </el-col>

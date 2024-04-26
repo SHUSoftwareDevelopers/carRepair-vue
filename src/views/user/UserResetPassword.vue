@@ -67,7 +67,7 @@ const modifyPassword = async()=>{
 <template>
     <el-card class="page-container">
         <template #header>
-            <div class="header">
+            <div class="header" style="color: #409eff; font-weight: bold;">
                 <span>修改密码</span>
             </div>
         </template>
