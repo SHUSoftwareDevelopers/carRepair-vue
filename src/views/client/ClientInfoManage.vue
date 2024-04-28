@@ -32,7 +32,7 @@ const onCurrentChange = (num) => {
 import { clientInfoListService,addClientService,clientInfoUpdateService } from "@/api/client.js";
 const clientList = async () => {
   let params = {
-    pageNum: pageNum.value,
+    page: pageNum.value,
     pageSize: pageSize.value,
     clientName: clientName.value,
     clientType: clientType.value,

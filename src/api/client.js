@@ -19,3 +19,23 @@ export const addClientService = (clientData)=>{
     }
     return request.post('/client/addClient',params)
 }
+
+export const ownCarInfoListService = (params)=>{
+    return request.get('/client/queryOwnCar',{params:params});
+}
+
+export const carInfoListService = (params)=>{
+    return request.get('/client/findCar',{params:params});
+}
+
+export const addCarService = (carInfoData)=>{
+    return request.post('/frontDesk/addCar',carInfoData);
+}
+
+export const carInfoUpdateService = (carInfoData)=>{
+    return request.put('/frontDesk/updateCar',carInfoData);
+}
+
+export const carDeleteService = (vin)=>{
+    return request.delete(`/frontDesk/deleteCar/`+vin);
+}

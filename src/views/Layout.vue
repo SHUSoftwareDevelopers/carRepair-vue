@@ -120,6 +120,12 @@ const handleCommand = (command) => {
                         </el-icon>
                         <span>基本资料</span>
                     </el-menu-item>
+                    <el-menu-item index="/client/ownCar" v-show="userInfoStore.info.userType==6">
+                        <el-icon>
+                            <EditPen />
+                        </el-icon>
+                        <span>车辆信息</span>
+                    </el-menu-item>
                     <el-menu-item index="/user/resetPassword">
                         <el-icon>
                             <EditPen />
