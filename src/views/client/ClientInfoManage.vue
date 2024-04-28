@@ -271,8 +271,8 @@ const updateClient = async()=>{
       </el-form-item>
       <el-form-item label="客户类别：" label-width="140px">
         <el-radio-group v-model="clientUpdateModel.clientType">
-          <el-radio value="0" size="large">个人</el-radio>
-          <el-radio value="1" size="large">单位</el-radio>
+          <el-radio value=0 size="large">个人</el-radio>
+          <el-radio value=1 size="large">单位</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="折扣率：" label-width="140px">

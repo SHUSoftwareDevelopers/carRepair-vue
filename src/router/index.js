@@ -8,6 +8,8 @@ import UserResetPasswordVue from '@/views/user/UserResetPassword.vue'
 import ClientInfoManageVue from '@/views/client/ClientInfoManage.vue'
 import ClientCarManageVue from '@/views/client/ClientCarManage.vue'
 import ClientOwnCarVue from '@/views/client/ClientOwnCar.vue'
+
+import EmpInfoManageVue from '@/views/emp/EmpInfoManage.vue'
 import component from 'element-plus/es/components/tree-select/src/tree-select-option.mjs'
 
 //定义路由关系
@@ -18,7 +20,8 @@ const routes = [
         {path:'/user/resetPassword',component:UserResetPasswordVue},
         {path:'/client/infoManage',component:ClientInfoManageVue},
         {path:'client/carManage',component:ClientCarManageVue},
-        {path:'client/ownCar',component:ClientOwnCarVue}
+        {path:'client/ownCar',component:ClientOwnCarVue},
+        {path:'emp/infoManage',component:EmpInfoManageVue}
     ]}
 ]
 

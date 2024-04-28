@@ -84,6 +84,17 @@ const carModel = ref({
   clientId: "",
 });
 
+const showDrawer = ()=>{
+  carModel.value={
+    vin: "",
+    license: "",
+    vehicleType: "",
+    vehicleColor: "",
+    clientId: "",
+  }
+  visibleDrawer.value = true;
+}
+
 const addCar = async () => {
   let result = await addCarService(carModel.value);
   ElMessage.success(result.msg ? result.msg : "添加成功");
@@ -143,7 +154,7 @@ const deleteCar = async (row) => {
       <div class="header" style="color: #409eff; font-weight: bold">
         <span>车辆管理</span>
         <div class="extra">
-          <el-button type="primary" @click="visibleDrawer = true"
+          <el-button type="primary" @click="showDrawer()"
             >添加客户车辆</el-button
           >
         </div>

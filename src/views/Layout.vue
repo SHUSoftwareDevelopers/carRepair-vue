@@ -87,6 +87,20 @@ const handleCommand = (command) => {
         <el-aside width="200px">
             <div class="el-aside__logo"></div>
             <el-menu active-text-color="#ffd04b" background-color="#232323" text-color="#fff" router>
+                <el-sub-menu index="3" v-show="userInfoStore.info.userType==0">
+                    <template #title>
+                        <el-icon>
+                            <UserFilled />
+                        </el-icon>
+                        <span>员工管理</span>
+                    </template>
+                    <el-menu-item index="/emp/infoManage">
+                        <el-icon>
+                            <Crop />
+                        </el-icon>
+                        <span>信息管理</span>
+                    </el-menu-item>
+                </el-sub-menu>
                 <el-sub-menu index="2" v-show="userInfoStore.info.userType==0||userInfoStore.info.userType==1">
                     <template #title>
                         <el-icon>
