@@ -10,6 +10,8 @@ import ClientCarManageVue from '@/views/client/ClientCarManage.vue'
 import ClientOwnCarVue from '@/views/client/ClientOwnCar.vue'
 
 import EmpInfoManageVue from '@/views/emp/EmpInfoManage.vue'
+import QueryRepairProgressVue from '@/views/client/QueryRepairProgress.vue'
+
 import component from 'element-plus/es/components/tree-select/src/tree-select-option.mjs'
 
 //定义路由关系
@@ -21,7 +23,8 @@ const routes = [
         {path:'/client/infoManage',component:ClientInfoManageVue},
         {path:'client/carManage',component:ClientCarManageVue},
         {path:'client/ownCar',component:ClientOwnCarVue},
-        {path:'emp/infoManage',component:EmpInfoManageVue}
+        {path: 'emp/infoManage', component: EmpInfoManageVue},
+        {path:'client/QueryRepairProgress', component: QueryRepairProgressVue}
     ]}
 ]
 
