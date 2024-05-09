@@ -87,6 +87,12 @@ const handleCommand = (command) => {
         <el-aside width="200px">
             <div class="el-aside__logo"></div>
             <el-menu active-text-color="#ffd04b" background-color="#232323" text-color="#fff" router>
+                    <el-menu-item index="/repair/vehicleFault" v-show="userInfoStore.info.userType==0||userInfoStore.info.userType==5">
+                        <el-icon>
+                            <Crop />
+                        </el-icon>
+                        <span>车辆故障管理</span>
+                    </el-menu-item>
                 <el-sub-menu index="3" v-show="userInfoStore.info.userType==0">
                     <template #title>
                         <el-icon>
@@ -101,7 +107,13 @@ const handleCommand = (command) => {
                         <span>信息管理</span>
                     </el-menu-item>
                 </el-sub-menu>
-                <el-sub-menu index="2" v-show="userInfoStore.info.userType==0||userInfoStore.info.userType==1">
+                    <el-menu-item index="/emp/queryDispatch" v-show="userInfoStore.info.userType>=2&&userInfoStore.info.userType<=4">
+                        <el-icon>
+                            <Crop />
+                        </el-icon>
+                        <span>接单大厅</span>
+                    </el-menu-item>
+                <el-sub-menu index="2" v-show="userInfoStore.info.userType==0||userInfoStore.info.userType==1||userInfoStore.info.userType==5">
                     <template #title>
                         <el-icon>
                             <UserFilled />
@@ -120,7 +132,19 @@ const handleCommand = (command) => {
                         </el-icon>
                         <span>车辆管理</span>
                     </el-menu-item>
+                    <el-menu-item index="/emp/listBills">
+                        <el-icon>
+                            <Crop />
+                        </el-icon>
+                        <span>账单信息</span>
+                    </el-menu-item>
                 </el-sub-menu>
+                <el-menu-item index="/client/vehicleFault" v-show="userInfoStore.info.userType==6">
+                    <el-icon>
+                        <Crop />
+                    </el-icon>
+                    <span>车辆维修信息</span>
+                </el-menu-item>
                 <el-sub-menu index="1">
                     <template #title>
                         <el-icon>
@@ -145,6 +169,18 @@ const handleCommand = (command) => {
                             <EditPen />
                         </el-icon>
                         <span>修改密码</span>
+                    </el-menu-item>
+                    <el-menu-item index="/emp/ongoingInfo" v-show="userInfoStore.info.userType>=2&&userInfoStore.info.userType<=4">
+                        <el-icon>
+                            <EditPen />
+                        </el-icon>
+                        <span>维修记录</span>
+                    </el-menu-item>
+                    <el-menu-item index="/client/clientBillsInfo" v-show="userInfoStore.info.userType==6">
+                        <el-icon>
+                            <EditPen />
+                        </el-icon>
+                        <span>我的账单</span>
                     </el-menu-item>
                 </el-sub-menu>
             </el-menu>

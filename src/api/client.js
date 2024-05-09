@@ -39,3 +39,19 @@ export const carInfoUpdateService = (carInfoData)=>{
 export const carDeleteService = (vin)=>{
     return request.delete(`/frontDesk/deleteCar/`+vin);
 }
+
+export const carFaultListService = (params)=>{
+    return request.get('/client/queryMyVehicleFaultInfo',{params:params});
+}
+
+export const queryOwnRepairService = (vfi)=>{
+    return request.get('/client/queryMaintenanceProgress?vfi='+vfi);
+}
+
+export const payBillService = (billInfo)=>{
+    return request.post('client/payBills',billInfo)
+}
+
+export const billInfoListService = (params)=>{
+    return request.get('/client/listMyBills',{params:params})
+}

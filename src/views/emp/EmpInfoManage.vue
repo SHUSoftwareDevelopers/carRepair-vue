@@ -12,10 +12,12 @@ const pageSize = ref(3); //每页条数
 //当每页条数发生了变化，调用此函数
 const onSizeChange = (size) => {
   pageSize.value = size;
+  empList()
 };
 //当前页码发生变化，调用此函数
 const onCurrentChange = (num) => {
   pageNum.value = num;
+  empList()
 };
 
 import {empInfoListService,addEmpService,empInfoUpdateService } from '@/api/emp.js'

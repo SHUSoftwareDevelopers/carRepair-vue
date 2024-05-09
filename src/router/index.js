@@ -10,8 +10,17 @@ import ClientCarManageVue from '@/views/client/ClientCarManage.vue'
 import ClientOwnCarVue from '@/views/client/ClientOwnCar.vue'
 
 import EmpInfoManageVue from '@/views/emp/EmpInfoManage.vue'
-import QueryRepairProgressVue from '@/views/client/QueryRepairProgress.vue'
 
+import VehicleFaultVue from '@/views/repair/VehicleFault.vue'
+import VehicleFaultDetailVue from '@/views/repair/VehicleFaultDetail.vue'
+
+import EmpOngoingInfoVue from '@/views/emp/EmpOngoingInfo.vue'
+import EmpQueryDispatchVue from '@/views/emp/EmpQueryDispatch.vue'
+import EmpListBillsVue from '@/views/emp/EmpListBills.vue'
+
+import ClientVehicleFaultVue from '@/views/client/ClientVehicleFault.vue'
+import ClientRepairProgressVue from '@/views/client/ClientRepairProgress.vue'
+import ClientBillsInfoVue from '@/views/client/ClientBillsInfo.vue'
 import component from 'element-plus/es/components/tree-select/src/tree-select-option.mjs'
 
 //定义路由关系
@@ -23,8 +32,15 @@ const routes = [
         {path:'/client/infoManage',component:ClientInfoManageVue},
         {path:'client/carManage',component:ClientCarManageVue},
         {path:'client/ownCar',component:ClientOwnCarVue},
-        {path: 'emp/infoManage', component: EmpInfoManageVue},
-        {path:'client/QueryRepairProgress', component: QueryRepairProgressVue}
+        {path:'emp/infoManage',component:EmpInfoManageVue},
+        {path:'repair/vehicleFault',component:VehicleFaultVue},
+        {path:'repair/vehicleFaultDetail',component:VehicleFaultDetailVue},
+        {path:'emp/ongoingInfo',component:EmpOngoingInfoVue},
+        {path:'emp/queryDispatch',component:EmpQueryDispatchVue},
+        {path:'client/vehicleFault',component:ClientVehicleFaultVue},
+        {path:'client/repairProgress',component:ClientRepairProgressVue},
+        {path:'client/clientBillsInfo',component:ClientBillsInfoVue},
+        {path:'emp/listBills',component:EmpListBillsVue}
     ]}
 ]
 
