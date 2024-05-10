@@ -224,6 +224,14 @@ const handleCommand = (command) => {
                 </div> -->
                 <router-view></router-view>
             </el-main>
+
+            <el-footer>
+                AutoQuickRepair 汽车快修 ©2024 Created by SHUSoftwareDevelopers
+                <a-tag color="gray"><template #icon><icon-github/></template>Github</a-tag>
+                <a-tag color="blue"><template #icon><icon-twitter/></template>Twitter</a-tag>
+                <a-tag color="arcoblue"><template #icon><icon-facebook/></template>Facebook</a-tag>
+                <a-tag color="gray"><template #icon><icon-google /></template>Google</a-tag>
+            </el-footer>
         </el-container>
     </el-container>
 </template>

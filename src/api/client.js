@@ -55,3 +55,7 @@ export const payBillService = (billInfo)=>{
 export const billInfoListService = (params)=>{
     return request.get('/client/listMyBills',{params:params})
 }
+
+export const queryVehicleByVfiService = (vfi)=>{
+    return request.get('/frontDesk/queryVehicleByVfi?vfi='+vfi);
+}

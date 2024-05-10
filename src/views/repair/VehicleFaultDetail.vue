@@ -18,6 +18,14 @@ const repairprogress = ref({
   mdoidToogidMap: {},
 });
 
+import { queryVehicleByVfiService } from "@/api/client.js";
+const vehicle = ref({});
+const getVehicle = async () => {
+  let result = await queryVehicleByVfiService(vfi);
+  vehicle.value = result.data;
+};
+getVehicle();
+
 //获取维修详细信息
 import {
   queryRepairProgressService,
@@ -297,6 +305,15 @@ const fuzhi = (mdoid) => {
         <span>车辆故障详细信息</span>
       </div>
     </template>
+
+    <!-- 汽车图片 -->
+    <div style="display: flex; justify-content: center">
+      <el-image
+        style="width: 600px; height: 338px"
+        :src="vehicle.vehicleImage"
+        fit="cover"
+      ></el-image>
+    </div>
 
     <el-button type="primary" @click="showDrawer()" round v-if="flag"
       >添加维修委托书</el-button

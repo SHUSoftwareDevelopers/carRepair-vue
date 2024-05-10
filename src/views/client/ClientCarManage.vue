@@ -3,6 +3,9 @@ import { Edit, Delete } from "@element-plus/icons-vue";
 
 import { ref } from "vue";
 
+import {useTokenStore} from '@/stores/token.js'
+const tokenStore = useTokenStore();
+
 //用户搜索时选中的车辆信息
 const vehicleColor = ref("");
 const vehicleType = ref("");
@@ -82,6 +85,7 @@ const carModel = ref({
   vehicleType: "",
   vehicleColor: "",
   clientId: "",
+  vehicleImage: "",
 });
 
 const showDrawer = ()=>{
@@ -91,6 +95,7 @@ const showDrawer = ()=>{
     vehicleType: "",
     vehicleColor: "",
     clientId: "",
+    vehicleImage: "",
   }
   visibleDrawer.value = true;
 }
@@ -112,6 +117,7 @@ const showDialog = (row) => {
   carModel.value.license = row.license;
   carModel.value.vehicleType = row.vehicleType;
   carModel.value.vehicleColor = row.vehicleColor;
+  carModel.value.vehicleImage = row.vehicleImage;
 };
 
 const updateCar = async () => {
@@ -147,6 +153,11 @@ const deleteCar = async (row) => {
       });
     });
 };
+
+const uploadSuccess = (result)=>{
+  carModel.value.vehicleImage = result.data;
+}
+
 </script>
 <template>
   <el-card class="page-container">
@@ -199,6 +210,12 @@ const deleteCar = async (row) => {
     </el-form>
     <!-- 车辆列表 -->
     <el-table :data="cars" style="width: 100%">
+      <el-table-column label="车辆图片" width="200">
+        <template v-slot:default="scope">
+          <!-- <img :src="scope.row.vehicleImage" style="width: 100%;" /> -->
+          <el-image  :key="scope.row.vehicleImage" :src="scope.row.vehicleImage" lazy />
+        </template>
+      </el-table-column>
       <el-table-column label="车主ID" prop="clientId"></el-table-column>
       <el-table-column label="车架号" prop="vin"></el-table-column>
       <el-table-column label="车牌号" prop="license"></el-table-column>
@@ -295,6 +312,22 @@ const deleteCar = async (row) => {
             style="width: 250px"
           ></el-input>
         </el-form-item>
+
+        <el-form-item label="车辆图片" label-width="500px">
+            <!-- auto-upload -->
+            <el-upload class="avatar-uploader" :auto-upload="true" :show-file-list="false"
+                action="https://1.95.59.208:8011/upload"
+                name="image"
+                :on-success="uploadSuccess"
+                :headers="{'Authorization':tokenStore.token}"
+            >
+                <img v-if="carModel.vehicleImage" :src="carModel.vehicleImage" class="avatar" />
+                <el-icon v-else class="avatar-uploader-icon">
+                    <Plus />
+                </el-icon>
+            </el-upload>
+        </el-form-item>
+
         <el-form-item>
           <el-button type="primary" @click="addCar">添加</el-button>
         </el-form-item>
@@ -303,7 +336,7 @@ const deleteCar = async (row) => {
   </el-card>
 
   <!-- 修改信息对话框 -->
-  <el-dialog v-model="dialogFormVisible" title="客户车辆信息" width="500">
+  <el-dialog v-model="dialogFormVisible" title="客户车辆信息" width="800">
     <el-form :model="carModel">
       <el-form-item label="车主ID：" label-width="140px">
         <el-input v-model="carModel.clientId" style="width: 250px" disabled />
@@ -335,6 +368,22 @@ const deleteCar = async (row) => {
       <el-form-item label="车辆颜色：" label-width="140px">
         <el-input v-model="carModel.vehicleColor" style="width: 250px" />
       </el-form-item>
+
+      <el-form-item label="车辆图片：" style="display: flex; align-items: center;" label-width="140px">
+          <!-- auto-upload -->
+          <el-upload class="avatar-uploader" :auto-upload="true" :show-file-list="false"
+              action="https://1.95.59.208:8011/upload"
+              name="image"
+              :on-success="uploadSuccess"
+              :headers="{'Authorization':tokenStore.token}"
+          >
+              <img v-if="carModel.vehicleImage" :src="carModel.vehicleImage" class="avatar" />
+              <el-icon v-else class="avatar-uploader-icon">
+                  <Plus />
+              </el-icon>
+          </el-upload>
+      </el-form-item>
+
     </el-form>
     <template #footer>
       <div class="dialog-footer">
@@ -344,7 +393,40 @@ const deleteCar = async (row) => {
     </template>
   </el-dialog>
 </template>
+
 <style lang="scss" scoped>
+
+.avatar-uploader {
+    :deep() {
+        .avatar {
+            width: 450px;
+            height: 300px;
+            display: block;
+        }
+
+        .el-upload {
+            border: 1px dashed var(--el-border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: var(--el-transition-duration-fast);
+        }
+
+        .el-upload:hover {
+            border-color: var(--el-color-primary);
+        }
+
+        .el-icon.avatar-uploader-icon {
+            font-size: 28px;
+            color: #8c939d;
+            width: 178px;
+            height: 178px;
+            text-align: center;
+        }
+    }
+}
+
 .page-container {
   min-height: 100%;
   box-sizing: border-box;

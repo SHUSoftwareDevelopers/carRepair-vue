@@ -42,5 +42,5 @@ export const userInfoUpdateService = (userInfoData)=>{
 export const userAvatarUpdateService = (avatarUrl)=>{
     const params = new URLSearchParams();
     params.append('avatarUrl',avatarUrl);
-   return request.patch('/common/updateAvatar',params);
+    return request.patch('/common/updateAvatar',params);
 }   

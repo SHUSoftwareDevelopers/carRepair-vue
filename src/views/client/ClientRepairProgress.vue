@@ -10,6 +10,16 @@ import { useVfiStore } from "@/stores/pageVfi.js";
 const vfiStore = useVfiStore();
 const vfi = vfiStore.vfi;
 console.log(vfi);
+
+import { queryVehicleByVfiService } from "@/api/client.js";
+const vehicle = ref({});
+const getVehicle = async () => {
+  let result = await queryVehicleByVfiService(vfi);
+  vehicle.value = result.data;
+};
+getVehicle();
+
+
 const repairprogress = ref({
   repairAuthorization: {},
   finishedTaskNum: 0,
@@ -67,6 +77,16 @@ const isCompleteMap = {
         <span>车辆维修详细信息</span>
       </div>
     </template>
+
+    <!-- 汽车图片 -->
+    <div style="display: flex; justify-content: center">
+      <el-image
+        style="width: 600px; height: 338px"
+        :src="vehicle.vehicleImage"
+        fit="cover"
+      ></el-image>
+    </div>
+
 
     <!-- 展示维修委托书-->
     <el-descriptions

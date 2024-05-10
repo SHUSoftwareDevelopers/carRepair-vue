@@ -64,20 +64,18 @@ import {userInfoUpdateService} from '@/api/common.js'
 import {clientInfoUpdateService} from '@/api/client.js'
 import {ElMessage} from 'element-plus'
 const updateUserInfo = async()=>{
-    //调用接口
+    // 修改用户头像
+    updateAvatar();
+    // 更新公共接口
     let result = await userInfoUpdateService(userInfo.value);
-
+    userInfoStore.setInfo(userInfo.value)
     if(userInfo.value.userType===6){
-        console.log("okokok")
+        // 更新客户接口
         await clientInfoUpdateService(clientInfo.value);
+        // 修改pinia中的客户信息
         clientInfoStore.setInfo(clientInfo.value)
     }
     ElMessage.success(result.msg?result.msg:"修改成功");
-
-    //修改pinia中的个人信息
-    userInfoStore.setInfo(userInfo.value)
-
-    updateAvatar();
 }
 
 //头像上传
@@ -100,8 +98,9 @@ import SpaceItem from 'element-plus/es/components/space/src/item';
 const updateAvatar = async()=>{
     //调用接口
     let result = await userAvatarUpdateService(imgUrl.value);
+    userInfo.value.avatar = imgUrl.value;
     //修改pinia中的数据
-    userInfoStore.info.avatar=imgUrl.value;
+    userInfoStore.info.avatar = imgUrl.value;
 }
 
 </script>
@@ -216,19 +215,20 @@ const updateAvatar = async()=>{
         <el-row>
             <el-col span="24">
                 <el-upload 
-                        ref="uploadRef"
-                        class="avatar-uploader"
-                        :show-file-list="false"
-                        :auto-upload="true"
-                        action="/api/upload"
-                        name="image"
-                        :headers="{'Authorization':tokenStore.token}"
-                        :on-success="uploadSuccess"
-                        >
-                        <img v-if="imgUrl" :src="imgUrl" class="avatar" />
-                        <img v-else :src="avatar" width="278" />
-                    </el-upload>
-                    <br><br>
+                    ref="uploadRef"
+                    class="avatar-uploader"
+                    :show-file-list="false"
+                    :auto-upload="true"
+                    action="https://1.95.59.208:8011/upload"
+                    name="image"
+                    :headers="{'Authorization':tokenStore.token}"
+                    :on-success="uploadSuccess"
+                    >
+                    <img v-if="imgUrl" :src="imgUrl" class="avatar" />
+                    <img v-else :src="avatar" width="278" />
+                </el-upload>
+                
+                <br><br>
             </el-col>
         </el-row>
         <el-row>

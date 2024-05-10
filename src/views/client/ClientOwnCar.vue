@@ -118,6 +118,12 @@ carList()
     </el-form>
     <!-- 车辆列表 -->
     <el-table :data="cars" style="width: 100%">
+      <el-table-column label="车辆图片" width="200">
+        <template v-slot:default="scope">
+          <!-- <img :src="scope.row.vehicleImage" style="width: 100%;" /> -->
+          <el-image  :key="scope.row.vehicleImage" :src="scope.row.vehicleImage" lazy />
+        </template>
+      </el-table-column>
       <el-table-column label="车架号" prop="vin"></el-table-column>
       <el-table-column label="车牌号" prop="license"></el-table-column>
       <el-table-column label="类型" prop="vehicleTypeName"></el-table-column>
