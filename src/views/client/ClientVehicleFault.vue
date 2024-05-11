@@ -64,13 +64,18 @@ vehicleFaultList()
 //故障信息跳转到详情页
 import { useRouter } from "vue-router";
 import { useVfiStore } from '@/stores/pageVfi.js'
+import { useVehicleFaultStore } from '@/stores/vehicleFault.js'
+
 import { ElMessage } from "element-plus";
 const router = useRouter();
 const vfiStore = useVfiStore();
+const VehicleFaultStore = useVehicleFaultStore();
 const toDetail = (row) => {
     vfiStore.removeVfi();
     vfiStore.setVfi(row.vfi);
-    router.push({path:'/client/repairProgress'});
+    VehicleFaultStore.removevehicleFault();
+    VehicleFaultStore.setvehicleFault(row);
+    router.push({ path: '/client/repairProgress' });
 }
 
 //支付功能
