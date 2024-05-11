@@ -12,6 +12,17 @@ const clientName = ref("");
 //客户列表数据模型
 const clients = ref([]);
 
+const clientTypes = ref([
+  {
+    "id":0,
+    "typename": "个人"
+  },
+  {
+    "id":1,
+    "typename": "单位"
+  }
+])
+
 //分页条数据模型
 const pageNum = ref(1); //当前页
 const total = ref(20); //总条数
@@ -30,7 +41,9 @@ const onCurrentChange = (num) => {
 
 //获取客户信息数据
 import { clientInfoListService,addClientService,clientInfoUpdateService } from "@/api/client.js";
+const loading = ref()
 const clientList = async () => {
+  loading.value = true;
   let params = {
     page: pageNum.value,
     pageSize: pageSize.value,
@@ -49,6 +62,7 @@ const clientList = async () => {
       clients.value[i].clientTypeName = "单位";
     }
   }
+  loading.value = false;
 };
 clientList();
 
@@ -150,7 +164,7 @@ const updateClient = async()=>{
       </el-form-item>
     </el-form>
     <!-- 客户列表 -->
-    <el-table :data="clients" style="width: 100%">
+    <el-table :data="clients" style="width: 100%" v-loading="loading" element-loading-text="Loading...">
       <el-table-column label="客户账号" prop="account"></el-table-column>
       <el-table-column label="客户姓名" prop="clientName"></el-table-column>
       <el-table-column label="客户类别" prop="clientTypeName"></el-table-column>
@@ -271,8 +285,7 @@ const updateClient = async()=>{
       </el-form-item>
       <el-form-item label="客户类别：" label-width="140px">
         <el-radio-group v-model="clientUpdateModel.clientType">
-          <el-radio value=0 size="large">个人</el-radio>
-          <el-radio value=1 size="large">单位</el-radio>
+          <el-radio v-for="c in clientTypes" :key="c.id" :label="c.typename" :value="c.id"></el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="折扣率：" label-width="140px">

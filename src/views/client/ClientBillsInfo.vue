@@ -23,7 +23,11 @@ const onCurrentChange = (num) => {
 
 import { billInfoListService } from "@/api/client.js";
 
+//加载loading
+const loading = ref();
+
 const billList = async()=>{
+    loading.value = true;
     let params = {
         page: pageNum.value,
         pageSize: pageSize.value,
@@ -32,6 +36,16 @@ const billList = async()=>{
     //渲染视图
     total.value = result.data.total;
     bills.value = result.data.rows;
+    loading.value = false;
+    for(let i=0; i<bills.value.length; i++){
+      if(bills.value[i].paymentMethod==0)
+        bills.value[i].paymentMethodName = "自付"
+      else if(bills.value[i].paymentMethod==1)
+        bills.value[i].paymentMethodName = "三包"
+      else
+        bills.value[i].paymentMethodName = "索赔"
+
+    }
 }
 billList()
 
@@ -44,11 +58,12 @@ billList()
       </div>
     </template>
     <!-- 车辆列表 -->
-    <el-table :data="bills" style="width: 100%">
+    <el-table :data="bills" style="width: 100%" v-loading="loading" 
+              element-loading-text="Loading...">
       <el-table-column label="账单ID" prop="billId"></el-table-column>
       <el-table-column label="车辆故障号" prop="vfi"></el-table-column>
       <el-table-column label="折扣率(减免)" prop="discountRate"></el-table-column>
-      <el-table-column label="支付方式" prop="paymentMethod"></el-table-column>
+      <el-table-column label="支付方式" prop="paymentMethodName"></el-table-column>
       <el-table-column label="支付金额" prop="payment"></el-table-column>
       <el-table-column label="支付时间" prop="payTime"></el-table-column>
       <template #empty>

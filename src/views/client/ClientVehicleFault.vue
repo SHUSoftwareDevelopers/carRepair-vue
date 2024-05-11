@@ -21,7 +21,9 @@ const onCurrentChange = (num) => {
   vehicleFaultList()
 };
 import { carFaultListService,payBillService} from '@/api/client.js'
+const loading = ref()
 const vehicleFaultList = async()=>{
+    loading.value = true
     vinList.value = []
     let params = {
         page: pageNum.value,
@@ -58,6 +60,7 @@ const vehicleFaultList = async()=>{
         else
             vehicleFaults.value[i].whetherPayName = "已支付";
     }
+    loading.value=false;
 }
 vehicleFaultList()
 
@@ -119,7 +122,7 @@ const payBill = async(row)=>{
         </el-form-item>
         </el-form>
         <!-- 车辆故障列表 -->
-        <el-table :data="vehicleFaults" style="width: 100%">
+        <el-table :data="vehicleFaults" style="width: 100%" v-loading="loading" element-loading-text="Loading...">
         <el-table-column label="车辆故障号" prop="vfi"></el-table-column>
         <el-table-column label="车架号" prop="vin" width="200"></el-table-column>
         <el-table-column label="维修类型" prop="maintenanceTypeName"></el-table-column>
@@ -129,7 +132,7 @@ const payBill = async(row)=>{
         <el-table-column label="是否支付" prop="whetherPayName"></el-table-column>
         <el-table-column label="支付/详情" width="100">
             <template #default="{row}"> 
-                <div v-if="row.repairStatus==0">
+                <div v-if="row.repairStatus==0||row.whetherPay==1">
                     <el-button :icon="Money" circle plain type="primary" disabled></el-button>
                     <el-button :icon="DArrowRight" circle plain type="success" @click="toDetail(row)"></el-button>
                 </div>

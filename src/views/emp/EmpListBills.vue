@@ -23,8 +23,9 @@ const onCurrentChange = (num) => {
 };
 
 import { ListBillsService } from "@/api/emp.js";
-
+const loading = ref()
 const billList = async()=>{
+    loading.value = true;
     let params = {
         page: pageNum.value,
         pageSize: pageSize.value,
@@ -34,6 +35,7 @@ const billList = async()=>{
     //渲染视图
     total.value = result.data.total;
     bills.value = result.data.rows;
+    loading.value = false;
 }
 billList()
 
@@ -60,7 +62,7 @@ billList()
       </el-form-item>
     </el-form>
     <!-- 车辆列表 -->
-    <el-table :data="bills" style="width: 100%">
+    <el-table :data="bills" style="width: 100%" v-loading="loading" element-loading-text="Loading...">
       <el-table-column label="账单ID" prop="billId"></el-table-column>
       <el-table-column label="车辆故障号" prop="vfi"></el-table-column>
       <el-table-column label="客户ID" prop="clientId"></el-table-column>

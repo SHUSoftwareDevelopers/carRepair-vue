@@ -23,7 +23,9 @@ const onCurrentChange = (num) => {
 };
 
 import {ownOngoingInfoListService,ongoingUpdateService} from '@/api/emp.js'
+const loading = ref()
 const ownOngoingList = async()=>{
+    loading.value = true;
     let params = {
         page: pageNum.value,
         pageSize: pageSize.value,
@@ -50,6 +52,7 @@ const ownOngoingList = async()=>{
         ongoings.value[i].statusName = "中断受理";
       }
     }
+    loading.value = false;
 }
 ownOngoingList()
 
@@ -108,7 +111,7 @@ const updateOngoing = async(row,num)=>{
       </el-form-item>
     </el-form>
     <!-- 车辆列表 -->
-    <el-table :data="ongoings" style="width: 100%">
+    <el-table :data="ongoings" style="width: 100%" v-loading="loading" element-loading-text="Loading...">
       <el-table-column label="派工单编号" prop="mdoid"></el-table-column>
       <el-table-column label="任务分配者ID" prop="assignId"></el-table-column>
       <el-table-column label="当前状态" prop="statusName"></el-table-column>

@@ -36,7 +36,10 @@ import {
   carDeleteService
 } from "@/api/client.js";
 
+const loading = ref();
+
 const carList = async () => {
+  loading.value = true;
   console.log("guo!");
   let params = {
     page: pageNum.value,
@@ -73,6 +76,7 @@ const carList = async () => {
       cars.value[i].vehicleTypeName = "Truck";
     }
   }
+  loading.value = false;
 };
 carList();
 
@@ -209,7 +213,7 @@ const uploadSuccess = (result)=>{
       </el-form-item>
     </el-form>
     <!-- 车辆列表 -->
-    <el-table :data="cars" style="width: 100%">
+    <el-table :data="cars" style="width: 100%"  v-loading="loading" element-loading-text="Loading...">
       <el-table-column label="车辆图片" width="200">
         <template v-slot:default="scope">
           <!-- <img :src="scope.row.vehicleImage" style="width: 100%;" /> -->

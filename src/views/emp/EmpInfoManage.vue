@@ -20,9 +20,37 @@ const onCurrentChange = (num) => {
   empList()
 };
 
-import {empInfoListService,addEmpService,empInfoUpdateService } from '@/api/emp.js'
+const empTypes = ref([
+  {
+    "id":0,
+    "typename": "管理员"
+  },
+  {
+    "id":1,
+    "typename": "前台"
+  },
+  {
+    "id":2,
+    "typename": "机修工"
+  },
+  {
+    "id":3,
+    "typename": "焊工"
+  },
+  {
+    "id":4,
+    "typename": "漆工"
+  },
+  {
+    "id":5,
+    "typename": "业务员"
+  },
+])
 
+import {empInfoListService,addEmpService,empInfoUpdateService } from '@/api/emp.js'
+const loading = ref()
 const empList = async () => {
+  loading.value = true;
   let params = {
     page: pageNum.value,
     pageSize: pageSize.value,
@@ -51,6 +79,7 @@ const empList = async () => {
       emps.value[i].empTypeName = "业务员";
     }
   }
+  loading.value = false;
 };
 empList();
 
@@ -134,7 +163,7 @@ const updateEmp = async()=>{
       </el-form-item>
     </el-form>
     <!-- 客户列表 -->
-    <el-table :data="emps" style="width: 100%">
+    <el-table :data="emps" style="width: 100%" v-loading="loading" element-loading-text="Loading...">
       <el-table-column label="员工ID" prop="empId"></el-table-column>
       <el-table-column label="员工姓名" prop="empName"></el-table-column>
       <el-table-column label="员工类别" prop="empTypeName"></el-table-column>
@@ -235,12 +264,7 @@ const updateEmp = async()=>{
             placeholder="请选择员工类别"
             style="width: 250px"
           >
-            <el-option label="管理员" value= "parseInt(0)" />
-            <el-option label="前台" value= "parseInt(1)" />
-            <el-option label="机修工" value= "parseInt(2)" />
-            <el-option label="焊工" value= "parseInt(3)" />
-            <el-option label="漆工" value= "parseInt(4)" />
-            <el-option label="业务员" value= "parseInt(5)" />
+            <el-option v-for="c in empTypes" :key="c.id" :label="c.typename" :value="c.id"/>
           </el-select>
       </el-form-item>
       <el-form-item label="员工账号：" label-width="140px">
@@ -270,5 +294,8 @@ const updateEmp = async()=>{
 }
 .el-input {
   --el-input-border-radius: 20px;
+}
+.el-select {
+    border-radius: 20px;
 }
 </style>

@@ -23,8 +23,52 @@ const onCurrentChange = (num) => {
   pageNum.value = num;
   vehicleFaultList()
 };
+
+const repairTypes = ref([
+    {
+        "id": 0,
+        "typename": "普通"
+    },
+    {
+        "id": 1,
+        "typename": "加急"
+    }
+])
+
+const taskTypes = ref([
+    {
+        "id": 0,
+        "typename": "大"
+    },
+    {
+        "id": 1,
+        "typename": "中"
+    },
+    {
+        "id": 2,
+        "typename": "小"
+    },
+])
+
+const payTypes = ref([
+    {
+        "id": 0,
+        "typename": "自付"
+    },
+    {
+        "id": 1,
+        "typename": "三包"
+    },
+    {
+        "id": 2,
+        "typename": "索赔"
+    },
+])
+
 import { vehicleFaultListService,addCarFaultService,getAllVinService,carFaultUpdateService } from '@/api/repair.js'
+const loading = ref()
 const vehicleFaultList = async()=>{
+    loading.value = true;
     vinList.value = []
     let params = {
         page: pageNum.value,
@@ -74,6 +118,7 @@ const vehicleFaultList = async()=>{
         vinList.value.push(newvin);
     }
     console.log(vinList.value)
+    loading.value = false;
 }
 vehicleFaultList()
 
@@ -269,7 +314,7 @@ const finishVF = async(row) => {
         </el-form-item>
         </el-form>
         <!-- 车辆故障列表 -->
-        <el-table :data="vehicleFaults" style="width: 100%">
+        <el-table :data="vehicleFaults" style="width: 100%" v-loading="loading" element-loading-text="Loading...">
         <el-table-column label="车架号" prop="vin"></el-table-column>
         <el-table-column label="维修类型" prop="maintenanceTypeName"></el-table-column>
         <el-table-column label="作业分类" prop="taskClassificationName"></el-table-column>
@@ -278,27 +323,16 @@ const finishVF = async(row) => {
         <el-table-column label="是否支付" prop="whetherPayName"></el-table-column>
         <el-table-column label="修改/确认完成/详情" width="150">
             <template #default="{row}">
-                <el-button
-                    :icon="Edit"
-                    circle
-                    plain
-                    type="primary"
-                    @click="showDialog(row)"
-                ></el-button>
-                <el-button
-                    :icon="Select"
-                    circle
-                    plain
-                    type="primary"
-                    @click="finishVF(row)"
-                ></el-button>
-                <el-button
-                    :icon="DArrowRight"
-                    circle
-                    plain
-                    type="success"
-                    @click="toDetail(row)"
-                ></el-button>
+                <div v-if="row.repairStatus==1">
+                    <el-button :icon="Edit" circle plain type="primary" @click="showDialog(row)" disabled></el-button>
+                    <el-button :icon="Select" circle plain type="primary" @click="finishVF(row)" disabled></el-button>
+                    <el-button :icon="DArrowRight" circle plain type="success" @click="toDetail(row)"></el-button>
+                </div>
+                <div v-else>
+                    <el-button :icon="Edit" circle plain type="primary" @click="showDialog(row)"></el-button>
+                    <el-button :icon="Select" circle plain type="primary" @click="finishVF(row)"></el-button>
+                    <el-button :icon="DArrowRight" circle plain type="success" @click="toDetail(row)"></el-button>
+                </div>
             </template>
         </el-table-column>
         <template #empty>
@@ -392,22 +426,17 @@ const finishVF = async(row) => {
             </el-form-item>
             <el-form-item label="维修类型:" label-width="140px">
                 <el-select v-model="carFaultModel.maintenanceType" placeholder="请选择维修类型" style="width: 250px">
-                    <el-option label="普通" value="0" />
-                    <el-option label="加急" value="1" />
+                    <el-option v-for="c in repairTypes" :key="c.id" :label="c.typename" :value="c.id"/>
                 </el-select>
             </el-form-item>
             <el-form-item label="作业分类:" label-width="140px">
                 <el-select v-model="carFaultModel.taskClassification" placeholder="请选择作业分类" style="width: 250px">
-                    <el-option label="大" value="0" />
-                    <el-option label="中" value="1" />
-                    <el-option label="小" value="2" />
+                    <el-option v-for="c in taskTypes" :key="c.id" :label="c.typename" :value="c.id"/>
                 </el-select>
             </el-form-item>
             <el-form-item label="结算方式:" label-width="140px">
                 <el-select v-model="carFaultModel.paymentMethod" placeholder="请选择结算方式" style="width: 250px">
-                    <el-option label="自付" value="0" />
-                    <el-option label="三包" value="1" />
-                    <el-option label="索赔" value="2" />
+                    <el-option v-for="c in payTypes" :key="c.id" :label="c.typename" :value="c.id"/>
                 </el-select>
             </el-form-item>
         </el-form>
@@ -432,8 +461,5 @@ const finishVF = async(row) => {
 }
 .el-input {
   --el-input-border-radius: 20px;
-}
-.el-autocomplete {
-    --el-autocomplete-border-radius: 20px;
 }
 </style>
