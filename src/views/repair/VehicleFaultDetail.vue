@@ -333,6 +333,17 @@ const fuzhi = (mdoid) => {
     gridData.value = [];
   }
 };
+
+import { useVehicleFaultStore } from '@/stores/vehicleFault.js'
+const pinia_vehicleFault = useVehicleFaultStore();
+// 获取具体的vehicleFault对象
+const vehicleFault = ref({
+  ...pinia_vehicleFault.vehicleFault
+})
+
+
+
+
 </script>
 
 <template>
@@ -351,6 +362,149 @@ const fuzhi = (mdoid) => {
         fit="cover"
       ></el-image>
     </div>
+
+    <br/><br/>
+    <a-timeline direction="horizontal" :pending=0 :mode="mode">
+
+    <a-timeline-item :label=" repairprogress.repairAuthorization.createTime " dotColor="var(--color-fill-4)">
+      <template #dot v-if="Object.keys(repairprogress.repairAuthorization).length !== 0">
+        <IconCheck
+          :style="{
+            fontSize: '12px',
+            padding: '2px',
+            boxSizing: 'border-box',
+            borderRadius: '50%',
+            backgroundColor: 'var(--color-primary-light-1)',
+          }"
+        />
+      </template>
+      <a-row :style="{ display: 'inline-flex', alignItems: 'center' }">
+        <icon-file-pdf :style="{ fontSize: '32px', marginRight: '16px', marginBottom: '12px' }"/>
+        <div :style="{ marginBottom: '12px' }">
+          生成维修委托书
+        </div>
+      </a-row>
+    </a-timeline-item>
+
+    <a-timeline-item dotColor="var(--color-fill-4)">
+      <template #dot v-if="repairprogress.finishedTaskNum === repairprogress.repairTaskList.length && repairprogress.repairTaskList.length !== 0">
+        <IconCheck
+          :style="{
+            fontSize: '12px',
+            padding: '2px',
+            boxSizing: 'border-box',
+            borderRadius: '50%',
+            backgroundColor: 'var(--color-primary-light-1)',
+          }"
+        />
+      </template>
+
+      <a-row :style="{ display: 'inline-flex', alignItems: 'center' }">
+        <icon-settings :style="{ fontSize: '32px', marginRight: '16px', marginBottom: '12px' }"/>
+        <div :style="{ marginBottom: '12px' }">
+          维修任务完成数
+          <div :style="{ fontSize: '12px', color: '#4E5969' }">
+            {{ repairprogress.finishedTaskNum }}/{{ repairprogress.repairTaskList.length }}
+          </div>
+        </div>
+      </a-row>
+    </a-timeline-item>
+
+    <a-timeline-item dotColor="var(--color-fill-4)">
+      <template #dot v-if="vehicleFault.repairStatus === 1">
+        <IconCheck
+          :style="{
+            fontSize: '12px',
+            padding: '2px',
+            boxSizing: 'border-box',
+            borderRadius: '50%',
+            backgroundColor: 'var(--color-primary-light-1)',
+          }"
+        />
+      </template>
+      <a-row :style="{ display: 'inline-flex', alignItems: 'center' }">
+        <icon-check-circle :style="{ fontSize: '32px', marginRight: '16px', marginBottom: '12px' }" />
+        <div :style="{ marginBottom: '12px' }">
+          确定维修完成
+        </div>
+      </a-row>
+    </a-timeline-item>
+
+    <a-timeline-item :label="vehicleFault.updateTime" dotColor="var(--color-fill-4)">
+      <template #dot v-if="vehicleFault.whetherPay === 1">
+        <IconCheck
+          :style="{
+            fontSize: '12px',
+            padding: '2px',
+            boxSizing: 'border-box',
+            borderRadius: '50%',
+            backgroundColor: 'var(--color-primary-light-1)',
+          }"
+        />
+      </template>
+      <a-row :style="{ display: 'inline-flex', alignItems: 'center' }">
+        <icon-wechatpay :style="{fontSize:'32px', marginRight: '16px', marginBottom: '12px'}"/>
+        <div :style="{ marginBottom: '12px' }">
+          客户付款
+        </div>
+      </a-row>
+    </a-timeline-item>
+
+    <a-timeline-item dotColor="var(--color-fill-4)">
+      <template #dot v-if="vehicleFault.whetherPay === 1">
+        <IconCheck
+          :style="{
+            fontSize: '12px',
+            padding: '2px',
+            boxSizing: 'border-box',
+            borderRadius: '50%',
+            backgroundColor: 'var(--color-primary-light-1)',
+          }"
+        />
+      </template>
+      <a-row :style="{ display: 'inline-flex', alignItems: 'center' }">
+        <icon-dashboard :style="{ fontSize: '32px', marginRight: '16px', marginBottom: '12px' }"/>
+        <div :style="{ marginBottom: '12px' }">
+          客户提车
+        </div>
+      </a-row>
+    </a-timeline-item>
+
+    <a-timeline-item :label=vehicleFault.updateTime dotColor="var(--color-fill-4)">
+      <template #dot v-if="vehicleFault.whetherPay === 1">
+        <IconCheck
+          :style="{
+            fontSize: '12px',
+            padding: '2px',
+            boxSizing: 'border-box',
+            borderRadius: '50%',
+            backgroundColor: 'var(--color-primary-light-1)',
+          }"
+        />
+      </template>
+      <a-row :style="{ display: 'inline-flex', alignItems: 'center' }">
+        <div :style="{ marginBottom: '12px' }">
+          业务订单结束
+          <br>
+          <a-tag v-if="vehicleFault.whetherPay === 1">
+            <template #icon>
+              <icon-check-circle-fill />
+            </template>
+            Passed
+          </a-tag>
+          <a-tag v-else>
+            <template #icon>
+              <icon-sync :style="{fontSize:'12px'}" spin/>
+            </template>
+            Repairing
+          </a-tag>
+        </div>
+      </a-row>
+    </a-timeline-item>
+
+    </a-timeline>
+
+    <br/><br/>
 
     <el-button type="primary" @click="showDrawer()" round v-if="flag"
       >添加维修委托书</el-button

@@ -92,7 +92,11 @@ const bill = ref({
 const payBill = async(row)=>{
   bill.value.vfi = row.vfi;
   let result = await payBillService(bill.value);
-  ElMessage.success(result.msg ? result.msg : "修改成功");
+  if (result.data.code === 1) {
+      ElMessage.success("支付成功!");
+  } else {
+      ElMessage.error(result.data.msg);
+  }
   vehicleFaultList();
 }
 

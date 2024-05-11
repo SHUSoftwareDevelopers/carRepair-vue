@@ -75,3 +75,7 @@ export const applyOrderService = (applyData)=>{
 export const ListBillsService = (params)=>{
     return request.get('/emp/listBills',{params:params})
 }
+
+export const queryVehicleFaultInfoByVFId = (vfi) => {
+    return request.get('/client/findFault/' + vfi);
+}

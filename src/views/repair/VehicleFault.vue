@@ -198,9 +198,15 @@ import { useRouter } from "vue-router";
 import { useVfiStore } from '@/stores/pageVfi.js'
 const router = useRouter();
 const vfiStore = useVfiStore();
-const toDetail = (row) => {
+import { useVehicleFaultStore } from '@/stores/vehicleFault.js'
+const VehicleFaultStore = useVehicleFaultStore();
+import{queryVehicleFaultInfoByVFId} from '@/api/emp.js'
+const toDetail = async(row) => {
     vfiStore.removeVfi();
     vfiStore.setVfi(row.vfi);
+    VehicleFaultStore.removevehicleFault();
+    let vehicleFaultRow = await queryVehicleFaultInfoByVFId(row.vfi); 
+    VehicleFaultStore.setvehicleFault(vehicleFaultRow.data);
     router.push({path:'/repair/vehicleFaultDetail'});
 }
 
