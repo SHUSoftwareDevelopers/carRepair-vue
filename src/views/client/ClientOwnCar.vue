@@ -26,8 +26,9 @@ const onCurrentChange = (num) => {
 };
 
 import { ownCarInfoListService } from "@/api/client.js";
-
+const loading = ref()
 const carList = async() => {
+    loading.value = true;
     console.log("guo!");
     let params = {
         page: pageNum.value,
@@ -72,6 +73,7 @@ const carList = async() => {
         cars.value[i].vehicleTypeName = "Truck";
       }
     }
+    loading.value=false;
 };
 carList()
 </script>
@@ -117,7 +119,7 @@ carList()
       </el-form-item>
     </el-form>
     <!-- 车辆列表 -->
-    <el-table :data="cars" style="width: 100%">
+    <el-table :data="cars" style="width: 100%" v-loading="loading" element-loading-text="Loading...">
       <el-table-column label="车辆图片" width="200">
         <template v-slot:default="scope">
           <!-- <img :src="scope.row.vehicleImage" style="width: 100%;" /> -->
@@ -128,15 +130,6 @@ carList()
       <el-table-column label="车牌号" prop="license"></el-table-column>
       <el-table-column label="类型" prop="vehicleTypeName"></el-table-column>
       <el-table-column label="颜色" prop="vehicleColor"></el-table-column>
-      <el-table-column label="操作" width="100">
-          <el-button
-            :icon="Edit"
-            circle
-            plain
-            type="primary"
-          ></el-button>
-          <el-button :icon="Delete" circle plain type="danger"></el-button>
-      </el-table-column>
       <template #empty>
         <el-empty description="没有数据" />
       </template>

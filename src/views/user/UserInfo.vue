@@ -39,6 +39,10 @@ switch(userInfo.value.userType){
 }
 console.log(roleUser.value)
 
+const clientCate = ref('')
+clientCate.value = clientInfo.value.clientType==0?"个人":"单位"
+console.log(clientCate.value)
+
 const rules = {
     username: [
         { required: true, message: '请输入用户昵称', trigger: 'blur' },
@@ -183,8 +187,8 @@ const updateAvatar = async()=>{
             </el-col>
             <el-col :span="8">
                 <el-form :model="clientInfo" label-width="100px" size="large">
-                    <el-form-item label="客户类型" prop="clientType">
-                            <el-input v-model="clientInfo.clientType" disabled :style="{ maxWidth: '280px'}">个人</el-input>
+                    <el-form-item label="客户类型" >
+                            <el-input v-model="clientCate" disabled :style="{ maxWidth: '280px'}"></el-input>
                     </el-form-item>
                 </el-form>
             </el-col>

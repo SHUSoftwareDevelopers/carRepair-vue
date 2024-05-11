@@ -1,5 +1,5 @@
 <script setup>
-import { Edit, Delete,Check,Close,Finished,Bell} from "@element-plus/icons-vue";
+import { Edit, Delete,Check,Close,Finished,Bell,DArrowRight} from "@element-plus/icons-vue";
 
 import { ref } from "vue";
 
@@ -24,7 +24,9 @@ const onCurrentChange = (num) => {
 
 import {dispatchOrderListService,getRepairItemService,applyOrderService} from '@/api/emp.js'
 import { emptyProps } from "element-plus";
+const loading = ref()
 const dispatchOrderList = async()=>{
+    loading.value = true;
     let params = {
         page: pageNum.value,
         pageSize: pageSize.value,
@@ -34,6 +36,16 @@ const dispatchOrderList = async()=>{
     //渲染视图
     total.value = result.data.total;
     orders.value = result.data.rows;
+    //添加新属性  status
+    for(let i=0; i<orders.value.length; i++){
+      if(orders.value[i].empId == null){
+        orders.value[i].status = "已分配";
+      }
+      else{
+        orders.value[i].status = "已分配";
+      }
+    }
+    loading.value = false;
 }
 dispatchOrderList()
 
@@ -62,6 +74,17 @@ const applyOrder = async(row)=>{
     ElMessage.success(result.msg ? result.msg : "修改成功");
     dispatchOrderList();
 };
+
+//跳转到派工单详情
+import { useRouter } from "vue-router";
+import { useVfiStore } from '@/stores/pageVfi.js'
+const router = useRouter();
+const vfiStore = useVfiStore();
+const toDetail = (row)=>{
+  vfiStore.removeVfi();
+  vfiStore.setVfi(row.vfi);
+  router.push({path:'/client/repairProgress'});
+}
 
 </script>
 <template>
@@ -93,9 +116,9 @@ const applyOrder = async(row)=>{
         >
       </el-form-item>
     </el-form>
-    <!-- 车辆列表 -->
-    <el-table :data="orders" style="width: 100%">
-        <!-- 加一个维修项目名称，通过riid来查 -->
+    <!-- 工单列表 -->
+    <el-table :data="orders" style="width: 100%" v-loading="loading" element-loading-text="Loading...">
+      <!-- 加一个维修项目名称，通过riid来查 -->
       <el-table-column label="维修项目名称" prop="repairItem"></el-table-column>
       <el-table-column label="工时" prop="workLength"></el-table-column>
       <el-table-column label="工时单价" prop="pricePerhour"></el-table-column>
@@ -104,6 +127,7 @@ const applyOrder = async(row)=>{
         <template #default="{row}">
             <el-button :icon="Bell" circle plain type="success" v-if="row.status=='未分配'" @click="applyOrder(row)"></el-button>
             <el-button :icon="Bell" circle plain type="danger" v-else disabled></el-button>
+            <el-button :icon="DArrowRight" circle plain type="primary" @click="toDetail(row)"></el-button>
         </template>
       </el-table-column>
       <template #empty>

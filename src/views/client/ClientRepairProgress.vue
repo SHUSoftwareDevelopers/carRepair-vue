@@ -35,10 +35,20 @@ const repairprogress = ref({
 
 //获取维修详细信息
 import { queryOwnRepairService } from "@/api/client.js";
+import { queryRepairProgressService } from "@/api/emp.js"
 import { es } from "element-plus/es/locales.mjs";
+import useUserInfoStore from '@/stores/userInfo.js'
+const activeNames = ref([]);
 const getProgress = async () => {
-  let result = await queryOwnRepairService(vfi);
-  console.log(result);
+  activeNames.value = [];
+  let result = {};
+  if(useUserInfoStore().info.userType==6){
+    result = await queryOwnRepairService(vfi);
+  }
+  else{
+    result = await queryRepairProgressService(vfi);
+  }
+  // console.log(result);
   // 将获取到的数据赋值给 repairprogress 对象
   repairprogress.value.repairAuthorization = result.data.repairAuthorization;
   repairprogress.value.finishedTaskNum = result.data.finishedTaskNum;
@@ -50,11 +60,15 @@ const getProgress = async () => {
   } else {
     flag.value = false;
   }
+    //初始化维修项目展示
+  for(let i=0;i<repairprogress.value.repairTaskList.length;i++){
+    activeNames.value.push(i);
+  }
 };
 getProgress();
 
 //展示维修项目+派工单
-const activeNames = ref(["1"]);
+
 const handleChange = (val) => {
   console.log(val);
 };
@@ -75,8 +89,6 @@ const isCompleteMap = {
 
 <template>
   <el-card class="page-container">
-    <!-- <strong>车辆故障维修进度：</strong> -->
-    <!-- <span>{{ repairprogress.finishedTaskNum }}/{{ repairprogress.repairTaskList.length }}</span> -->
     <template #header>
       <div class="header" style="color: #409eff; font-weight: bold">
         <span>车辆维修详细信息</span>
@@ -382,6 +394,11 @@ const isCompleteMap = {
       </el-descriptions-item>
     </el-descriptions>
 
+    <br />
+    <div v-if="flag == false">
+        <strong>车辆故障维修进度：</strong>
+        <span>{{ repairprogress.finishedTaskNum }}/{{ repairprogress.repairTaskList.length }}</span>
+    </div>
     <br /><br />
 
     <!-- 展示维修项目和对应的派工单 -->

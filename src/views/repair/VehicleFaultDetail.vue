@@ -38,7 +38,42 @@ import {
   updateDispatchService,
 } from "@/api/emp.js";
 import { es } from "element-plus/es/locales.mjs";
+
+const boolTypes = ref([
+  {
+    "id": 0,
+    "typename": "否"
+  },
+  {
+    "id": 1,
+    "typename": "是"
+  }
+])
+
+const empTypes = ref([
+  {
+    "id":2,
+    "typename": "机修工"
+  },
+  {
+    "id":3,
+    "typename": "焊工"
+  },
+  {
+    "id":4,
+    "typename": "漆工"
+  },
+  {
+    "id":"",
+    "typename": "暂无"
+  },
+])
+
+//展示维修项目下拉
+const activeNames = ref([]);
+
 const getProgress = async () => {
+  activeNames.value = [];
   let result = await queryRepairProgressService(vfi);
   console.log(result);
   // 将获取到的数据赋值给 repairprogress 对象
@@ -53,11 +88,15 @@ const getProgress = async () => {
     flag.value = false;
   }
   console.log(repairprogress.value.mdoidToogidMap);
+  console.log(repairprogress.value.repairTaskList.length)
+  //初始化维修项目展示
+  for(let i=0;i<repairprogress.value.repairTaskList.length;i++){
+    activeNames.value.push(i);
+  }
 };
 getProgress();
 
-//展示维修项目+派工单
-const activeNames = ref(["1"]);
+//展示维修项目+派工单 activeNames已初始化
 const handleChange = (val) => {
   console.log(val);
 };
@@ -298,8 +337,6 @@ const fuzhi = (mdoid) => {
 
 <template>
   <el-card class="page-container">
-    <!-- <strong>车辆故障维修进度：</strong> -->
-    <!-- <span>{{ repairprogress.finishedTaskNum }}/{{ repairprogress.repairTaskList.length }}</span> -->
     <template #header>
       <div class="header" style="color: #409eff; font-weight: bold">
         <span>车辆故障详细信息</span>
@@ -471,6 +508,11 @@ const fuzhi = (mdoid) => {
       </el-descriptions-item>
     </el-descriptions>
 
+    <br />
+    <div v-if="flag == false">
+        <strong>车辆故障维修进度：</strong>
+        <span>{{ repairprogress.finishedTaskNum }}/{{ repairprogress.repairTaskList.length }}</span>
+    </div>
     <br /><br />
 
     <!-- 展示维修项目和对应的派工单 -->
@@ -840,8 +882,7 @@ const fuzhi = (mdoid) => {
               placeholder="请选择是否洗车"
               style="width: 250px"
             >
-              <el-option label="是" value="1" />
-              <el-option label="否" value="0" />
+              <el-option v-for="c in boolTypes" :key="c.id" :label="c.typename" :value="c.id"/>
             </el-select>
           </el-form-item>
           <el-form-item label="旧件是否带回：" label-width="140px">
@@ -850,12 +891,8 @@ const fuzhi = (mdoid) => {
               placeholder="请选择是否带回旧件"
               style="width: 250px"
             >
-              <el-option label="是" value="1" />
-              <el-option label="否" value="0" />
+              <el-option v-for="c in boolTypes" :key="c.id" :label="c.typename" :value="c.id"/>
             </el-select>
-          </el-form-item>
-          <el-form-item label="维修总费用：" label-width="140px">
-            <el-input v-model="RAModel.totalCost" style="width: 250px" />
           </el-form-item>
           <el-form-item label="预计交付日期：" label-width="140px">
             <el-date-picker
@@ -898,7 +935,7 @@ const fuzhi = (mdoid) => {
               style="width: 250px"
             />
           </el-form-item>
-          <el-form-item label="是否已完成：" label-width="140px">
+          <!-- <el-form-item label="是否已完成：" label-width="140px">
             <el-select
               v-model="RTModel.isComplete"
               placeholder="维修项目是否已完成"
@@ -907,7 +944,7 @@ const fuzhi = (mdoid) => {
               <el-option label="是" value="1" />
               <el-option label="否" value="0" />
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
         </el-form>
         <template #footer>
           <div class="dialog-footer">
@@ -937,16 +974,6 @@ const fuzhi = (mdoid) => {
           </el-form-item>
           <el-form-item label="零件总金额：" label-width="140px">
             <el-input v-model="RTModel.totalComponentPrice" style="width: 250px" />
-          </el-form-item>
-          <el-form-item label="是否已完成：" label-width="140px">
-            <el-select
-              v-model="RTModel.isComplete"
-              placeholder="维修项目是否已完成"
-              style="width: 250px"
-            >
-              <el-option label="是" value="1" />
-              <el-option label="否" value="0" />
-            </el-select>
           </el-form-item>
         </el-form>
         <template #footer>
@@ -1034,10 +1061,7 @@ const fuzhi = (mdoid) => {
               placeholder="请选择维修员类型"
               style="width: 250px"
             >
-              <el-option label="机修工" value="2" />
-              <el-option label="焊工" value="3" />
-              <el-option label="漆工" value="4" />
-              <el-option label="暂无" value="" />
+              <el-option v-for="c in empTypes" :key="c.id" :label="c.typename" :value="c.id"/>
             </el-select>
           </el-form-item>
         </el-form>
